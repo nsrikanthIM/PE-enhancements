@@ -3,9 +3,10 @@ import type { PlanChangeImpact } from "@shared/schema";
 
 interface PlanChangeImpactProps {
   impact: PlanChangeImpact;
+  planId: string;
 }
 
-export default function PlanChangeImpact({ impact }: PlanChangeImpactProps) {
+export default function PlanChangeImpact({ impact, planId }: PlanChangeImpactProps) {
   const hasSavings = impact.yearlySavings > 0;
   const hasLosses = impact.doctorsLost > 0 || impact.pharmaciesLost > 0 || impact.coverageChanges.length > 0;
 
@@ -16,9 +17,9 @@ export default function PlanChangeImpact({ impact }: PlanChangeImpactProps) {
   return (
     <div
       className="border-l-4 border-l-primary bg-primary/5 p-4 mx-6 mb-4 rounded-r-lg"
-      data-testid="plan-change-impact"
+      data-testid={`plan-change-impact-${planId}`}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-center gap-3">
         <div className="flex-shrink-0">
           {hasSavings ? (
             <div className="bg-green-100 p-2 rounded-full">
@@ -32,13 +33,13 @@ export default function PlanChangeImpact({ impact }: PlanChangeImpactProps) {
         </div>
         
         <div className="flex-1 space-y-2">
-          <h4 className="font-semibold text-foreground">
+          <h4 className="font-semibold text-foreground" data-testid={`text-impact-title-${planId}`}>
             {hasSavings ? "Potential Savings" : "Plan Change Impact"}
           </h4>
           
           <div className="space-y-1.5 text-sm">
             {impact.yearlySavings !== 0 && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" data-testid={`text-yearly-savings-${planId}`}>
                 {impact.yearlySavings > 0 ? (
                   <>
                     <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
@@ -58,7 +59,7 @@ export default function PlanChangeImpact({ impact }: PlanChangeImpactProps) {
             )}
 
             {impact.doctorsLost > 0 && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" data-testid={`text-doctors-lost-${planId}`}>
                 <AlertCircle className="w-4 h-4 text-orange-600 flex-shrink-0" />
                 <span className="text-muted-foreground">
                   But you may lose{" "}
@@ -70,7 +71,7 @@ export default function PlanChangeImpact({ impact }: PlanChangeImpactProps) {
             )}
 
             {impact.doctorsGained > 0 && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" data-testid={`text-doctors-gained-${planId}`}>
                 <Users className="w-4 h-4 text-green-600 flex-shrink-0" />
                 <span className="text-muted-foreground">
                   You'll gain access to{" "}
@@ -82,7 +83,7 @@ export default function PlanChangeImpact({ impact }: PlanChangeImpactProps) {
             )}
 
             {impact.pharmaciesLost > 0 && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" data-testid={`text-pharmacies-lost-${planId}`}>
                 <AlertCircle className="w-4 h-4 text-orange-600 flex-shrink-0" />
                 <span className="text-muted-foreground">
                   You may lose coverage at{" "}
@@ -94,7 +95,7 @@ export default function PlanChangeImpact({ impact }: PlanChangeImpactProps) {
             )}
 
             {impact.pharmaciesGained > 0 && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" data-testid={`text-pharmacies-gained-${planId}`}>
                 <Building2 className="w-4 h-4 text-green-600 flex-shrink-0" />
                 <span className="text-muted-foreground">
                   You'll gain coverage at{" "}
@@ -106,7 +107,7 @@ export default function PlanChangeImpact({ impact }: PlanChangeImpactProps) {
             )}
 
             {impact.coverageChanges.map((change, index) => (
-              <div key={index} className="flex items-center gap-2">
+              <div key={index} className="flex items-center gap-2" data-testid={`text-coverage-change-${index}-${planId}`}>
                 <AlertCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
                 <span className="text-muted-foreground">{change}</span>
               </div>

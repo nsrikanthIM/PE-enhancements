@@ -8,6 +8,7 @@ interface CircularProgressProps {
   className?: string;
   blurred?: boolean;
   onClick?: () => void;
+  testId?: string;
 }
 
 export default function CircularProgress({
@@ -17,6 +18,7 @@ export default function CircularProgress({
   className = "",
   blurred = false,
   onClick,
+  testId = "circular-progress",
 }: CircularProgressProps) {
   const [progress, setProgress] = useState(0);
   const [displayPercentage, setDisplayPercentage] = useState(0);
@@ -56,7 +58,7 @@ export default function CircularProgress({
       className={`relative rounded-full ${onClick ? "cursor-pointer transition-transform hover:scale-105" : ""} ${className}`}
       style={{ width: size, height: size }}
       onClick={onClick}
-      data-testid="circular-progress"
+      data-testid={testId}
     >
       {blurred && (
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-transparent backdrop-blur-md z-20 border-2 border-primary/30 shadow-lg">

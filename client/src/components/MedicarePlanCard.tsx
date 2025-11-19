@@ -38,9 +38,9 @@ export default function MedicarePlanCard({
     }).format(num);
   };
 
-  const renderStars = (rating: number) => {
+  const renderStars = (rating: number, planId: string) => {
     return (
-      <div className="flex items-center gap-0.5">
+      <div className="flex items-center gap-0.5" data-testid={`stars-rating-${planId}`}>
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
@@ -51,7 +51,7 @@ export default function MedicarePlanCard({
                 ? "fill-yellow-500/50 text-yellow-500"
                 : "fill-none text-muted"
             }`}
-            data-testid={`star-${star}`}
+            data-testid={`star-${star}-${planId}`}
           />
         ))}
       </div>
@@ -81,25 +81,26 @@ export default function MedicarePlanCard({
             strokeWidth={8}
             blurred={!scoreUnlocked}
             onClick={handleScoreClick}
+            testId={`circular-progress-${plan.id}`}
           />
         </div>
 
         <CardHeader className="pb-4 pr-28">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <h3 className="text-xl font-normal text-primary leading-tight mb-2" data-testid="text-plan-name">
+              <h3 className="text-xl font-normal text-primary leading-tight mb-2" data-testid={`text-plan-name-${plan.id}`}>
                 {plan.planName}
               </h3>
               <div className="flex items-center gap-3">
-                {renderStars(plan.starRating)}
-                <span className="text-sm text-muted-foreground">{plan.year}</span>
-                <span className="text-sm text-muted-foreground">{plan.carrier}</span>
+                {renderStars(plan.starRating, plan.id)}
+                <span className="text-sm text-muted-foreground" data-testid={`text-year-${plan.id}`}>{plan.year}</span>
+                <span className="text-sm text-muted-foreground" data-testid={`text-carrier-${plan.id}`}>{plan.carrier}</span>
               </div>
             </div>
           </div>
         </CardHeader>
 
-        {planChangeImpact && <PlanChangeImpact impact={planChangeImpact} />}
+        {planChangeImpact && <PlanChangeImpact impact={planChangeImpact} planId={plan.id} />}
 
         <CardContent className="pt-0">
           <div className="border-t pt-4">
@@ -109,7 +110,7 @@ export default function MedicarePlanCard({
                   <span className="text-sm text-muted-foreground">Monthly Premium</span>
                   <Info className="w-3.5 h-3.5 text-muted-foreground" />
                 </div>
-                <div className="text-4xl font-bold text-primary" data-testid="text-premium">
+                <div className="text-4xl font-bold text-primary" data-testid={`text-premium-${plan.id}`}>
                   {formatCurrency(plan.monthlyPremium)}
                 </div>
               </div>
@@ -120,7 +121,7 @@ export default function MedicarePlanCard({
                     <span className="text-sm text-muted-foreground">Medical Deductible</span>
                     <Info className="w-3.5 h-3.5 text-muted-foreground" />
                   </div>
-                  <div className="text-base font-medium" data-testid="text-medical-deductible">
+                  <div className="text-base font-medium" data-testid={`text-medical-deductible-${plan.id}`}>
                     {formatCurrency(plan.medicalDeductible)}
                   </div>
                 </div>
@@ -130,7 +131,7 @@ export default function MedicarePlanCard({
                     <span className="text-sm text-muted-foreground">Out of Pocket Health Max</span>
                     <Info className="w-3.5 h-3.5 text-muted-foreground" />
                   </div>
-                  <div className="text-base font-medium" data-testid="text-out-of-pocket">
+                  <div className="text-base font-medium" data-testid={`text-out-of-pocket-${plan.id}`}>
                     {formatCurrency(plan.outOfPocketMax)}
                   </div>
                 </div>
@@ -140,7 +141,7 @@ export default function MedicarePlanCard({
                     <span className="text-sm text-muted-foreground">Rx Drug Deductible</span>
                     <Info className="w-3.5 h-3.5 text-muted-foreground" />
                   </div>
-                  <div className="text-base font-medium" data-testid="text-rx-deductible">
+                  <div className="text-base font-medium" data-testid={`text-rx-deductible-${plan.id}`}>
                     {plan.rxDrugDeductible === "0" || parseFloat(plan.rxDrugDeductible) === 0
                       ? "No Rx Drug coverage"
                       : formatCurrency(plan.rxDrugDeductible)}
@@ -163,7 +164,7 @@ export default function MedicarePlanCard({
                 {plan.doctorName ? (
                   <>
                     <User className="w-4 h-4 text-primary" />
-                    <span className="text-primary" data-testid="text-doctor-name">
+                    <span className="text-primary" data-testid={`text-doctor-name-${plan.id}`}>
                       {plan.doctorName}
                     </span>
                   </>
@@ -193,7 +194,7 @@ export default function MedicarePlanCard({
               <Checkbox
                 id={`compare-${plan.id}`}
                 onCheckedChange={onCompareChange}
-                data-testid="checkbox-compare"
+                data-testid={`checkbox-compare-${plan.id}`}
               />
               <label
                 htmlFor={`compare-${plan.id}`}
@@ -206,7 +207,7 @@ export default function MedicarePlanCard({
             <button
               onClick={() => setIsPdfModalOpen(true)}
               className="flex items-center gap-1.5 text-sm text-primary hover-elevate active-elevate-2 px-2 py-1 rounded-md transition-colors"
-              data-testid="button-pdf-summary"
+              data-testid={`button-pdf-summary-${plan.id}`}
             >
               <FileText className="w-4 h-4" />
               <span>Plan Summary</span>
@@ -218,11 +219,11 @@ export default function MedicarePlanCard({
               variant="ghost"
               className="text-primary hover:text-primary"
               onClick={onViewDetails}
-              data-testid="button-view-details"
+              data-testid={`button-view-details-${plan.id}`}
             >
               View Plan Details
             </Button>
-            <Button onClick={onEnroll} data-testid="button-enroll">
+            <Button onClick={onEnroll} data-testid={`button-enroll-${plan.id}`}>
               Enroll
             </Button>
           </div>
