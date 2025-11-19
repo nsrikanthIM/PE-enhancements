@@ -81,11 +81,11 @@ export default function MedicarePlanCard({
   return (
     <>
       <Card className="relative w-full max-w-[800px] bg-white" data-testid={`card-plan-${plan.id}`}>
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 right-4 z-10 flex flex-col items-center gap-1">
           <CircularProgress
             percentage={plan.matchScore}
-            size={70}
-            strokeWidth={6}
+            size={56}
+            strokeWidth={5}
             blurred={!scoreUnlocked}
             onClick={handleScoreClick}
             onWhyClick={() => setIsBreakdownModalOpen(true)}
@@ -93,7 +93,7 @@ export default function MedicarePlanCard({
           />
         </div>
 
-        <CardHeader className="pb-4 pr-24">
+        <CardHeader className="pb-4 pr-20">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <h3 className="text-xl font-normal text-primary leading-tight mb-2" data-testid={`text-plan-name-${plan.id}`}>
