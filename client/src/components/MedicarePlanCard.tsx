@@ -9,6 +9,7 @@ import PdfSummaryModal from "./PdfSummaryModal";
 import InNetworkDoctorsModal from "./InNetworkDoctorsModal";
 import InNetworkPharmaciesModal from "./InNetworkPharmaciesModal";
 import PlanChangeImpact from "./PlanChangeImpact";
+import ProfileCompletionPrompt from "./ProfileCompletionPrompt";
 import type { MedicarePlan, PlanChangeImpact as PlanChangeImpactType } from "@shared/schema";
 
 interface MedicarePlanCardProps {
@@ -103,6 +104,10 @@ export default function MedicarePlanCard({
             </div>
           </div>
         </CardHeader>
+
+        <div className="px-6 pb-4">
+          <ProfileCompletionPrompt planId={plan.id} />
+        </div>
 
         {planChangeImpact && <PlanChangeImpact impact={planChangeImpact} planId={plan.id} />}
 
