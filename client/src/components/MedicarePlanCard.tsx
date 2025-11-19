@@ -6,7 +6,8 @@ import { Star, Info, Building2, User, Pill, X, Download } from "lucide-react";
 import CircularProgress from "./CircularProgress";
 import MatchScoreForm from "./MatchScoreForm";
 import PdfSummaryModal from "./PdfSummaryModal";
-import NetworkDetailsModal from "./NetworkDetailsModal";
+import InNetworkDoctorsModal from "./InNetworkDoctorsModal";
+import InNetworkPharmaciesModal from "./InNetworkPharmaciesModal";
 import PlanChangeImpact from "./PlanChangeImpact";
 import type { MedicarePlan, PlanChangeImpact as PlanChangeImpactType } from "@shared/schema";
 
@@ -27,7 +28,8 @@ export default function MedicarePlanCard({
 }: MedicarePlanCardProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
-  const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
+  const [isDoctorsModalOpen, setIsDoctorsModalOpen] = useState(false);
+  const [isPharmaciesModalOpen, setIsPharmaciesModalOpen] = useState(false);
   const [scoreUnlocked, setScoreUnlocked] = useState(false);
 
   const formatCurrency = (value: string | number) => {
@@ -153,29 +155,47 @@ export default function MedicarePlanCard({
             </div>
           </div>
 
-          <div className="border-t mt-4 pt-4 space-y-3">
+          <div className="border-t mt-4 pt-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-sm">
-                <Building2 className="w-4 h-4 text-muted-foreground" />
-                <span className="text-muted-foreground">
-                  {plan.pharmaciesCovered === 0 ? "0" : plan.pharmaciesCovered} of {plan.pharmaciesCovered === 0 ? "1" : plan.pharmaciesCovered} Pharmacies Covered
-                </span>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2 text-sm">
+                  <Building2 className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">
+                    {plan.pharmaciesCovered === 0 ? "0" : plan.pharmaciesCovered} of {plan.pharmaciesCovered === 0 ? "1" : plan.pharmaciesCovered} Pharmacies Covered
+                  </span>
+                </div>
+                <button
+                  onClick={() => setIsPharmaciesModalOpen(true)}
+                  className="text-xs text-primary hover:underline self-start ml-6"
+                  data-testid={`button-view-pharmacies-${plan.id}`}
+                >
+                  View In-Network Pharmacies
+                </button>
               </div>
 
-              <div className="flex items-center gap-2 text-sm">
-                {plan.doctorName ? (
-                  <>
-                    <User className="w-4 h-4 text-primary" />
-                    <span className="text-primary" data-testid={`text-doctor-name-${plan.id}`}>
-                      {plan.doctorName}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <X className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">Tommy Rose</span>
-                  </>
-                )}
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2 text-sm">
+                  {plan.doctorName ? (
+                    <>
+                      <User className="w-4 h-4 text-primary" />
+                      <span className="text-primary" data-testid={`text-doctor-name-${plan.id}`}>
+                        {plan.doctorName}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <X className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">Tommy Rose</span>
+                    </>
+                  )}
+                </div>
+                <button
+                  onClick={() => setIsDoctorsModalOpen(true)}
+                  className="text-xs text-primary hover:underline self-end"
+                  data-testid={`button-view-doctors-${plan.id}`}
+                >
+                  View In-Network Doctors
+                </button>
               </div>
 
               <div className="flex items-center gap-2 text-sm italic">
@@ -186,19 +206,6 @@ export default function MedicarePlanCard({
                     : "Rx Drug coverage"}
                 </span>
               </div>
-            </div>
-
-            <div className="flex justify-center">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsNetworkModalOpen(true)}
-                className="text-primary border-primary/30 hover:bg-primary/5"
-                data-testid={`button-network-details-${plan.id}`}
-              >
-                <User className="w-4 h-4 mr-2" />
-                View In-Network Providers
-              </Button>
             </div>
           </div>
         </CardContent>
@@ -247,7 +254,8 @@ export default function MedicarePlanCard({
 
       <MatchScoreForm open={isFormOpen} onOpenChange={handleFormClose} />
       <PdfSummaryModal open={isPdfModalOpen} onOpenChange={setIsPdfModalOpen} plan={plan} />
-      <NetworkDetailsModal open={isNetworkModalOpen} onOpenChange={setIsNetworkModalOpen} plan={plan} />
+      <InNetworkDoctorsModal open={isDoctorsModalOpen} onOpenChange={setIsDoctorsModalOpen} plan={plan} />
+      <InNetworkPharmaciesModal open={isPharmaciesModalOpen} onOpenChange={setIsPharmaciesModalOpen} plan={plan} />
     </>
   );
 }
