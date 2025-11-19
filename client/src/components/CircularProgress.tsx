@@ -111,10 +111,10 @@ export default function CircularProgress({
       </svg>
       
       <div className={`absolute inset-0 flex flex-col items-center justify-center ${blurred ? "blur-sm opacity-60" : ""}`}>
-        <div className="text-2xl font-bold" style={{ color: getColor(percentage) }}>
+        <div className="text-xl font-bold" style={{ color: getColor(percentage) }}>
           {displayPercentage}%
         </div>
-        <div className="text-xs text-muted-foreground mt-0.5">Match</div>
+        <div className="text-[10px] text-muted-foreground">Match</div>
       </div>
       
       {onWhyClick && (
@@ -123,7 +123,7 @@ export default function CircularProgress({
             e.stopPropagation();
             onWhyClick();
           }}
-          className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs text-primary hover:underline font-medium whitespace-nowrap bg-white px-2 py-0.5 rounded"
+          className="absolute top-full mt-1.5 left-1/2 -translate-x-1/2 text-[10px] font-semibold text-primary-foreground bg-primary hover-elevate active-elevate-2 px-2 py-0.5 rounded whitespace-nowrap"
           data-testid={`${testId}-why-button`}
         >
           Why?
