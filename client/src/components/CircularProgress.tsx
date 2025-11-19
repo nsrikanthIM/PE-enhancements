@@ -57,8 +57,8 @@ export default function CircularProgress({
 
   return (
     <div
-      className={`relative rounded-full ${onClick ? "cursor-pointer transition-transform hover:scale-105" : ""} ${className}`}
-      style={{ width: size, height: size }}
+      className={`relative ${onClick ? "cursor-pointer transition-transform hover:scale-105" : ""} ${className}`}
+      style={{ width: size }}
       onClick={onClick}
       data-testid={testId}
     >
@@ -123,7 +123,7 @@ export default function CircularProgress({
             e.stopPropagation();
             onWhyClick();
           }}
-          className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-primary hover:underline font-medium whitespace-nowrap"
+          className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs text-primary hover:underline font-medium whitespace-nowrap bg-white px-2 py-0.5 rounded"
           data-testid={`${testId}-why-button`}
         >
           Why?

@@ -81,7 +81,7 @@ export default function MedicarePlanCard({
   return (
     <>
       <Card className="relative w-full max-w-[800px] bg-white" data-testid={`card-plan-${plan.id}`}>
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 right-4 z-10 pb-8">
           <CircularProgress
             percentage={plan.matchScore}
             size={88}
