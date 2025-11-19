@@ -3,25 +3,3 @@ from = "/*"
 to = "/index.html"
 status = 200
 
-# sentry build plugin
-[[plugins]]
-package = "@sentry/netlify-build-plugin"
-[plugins.inputs]
-sentryOrg = "integrity-marketing-org"
-sentryProject = "ae-consumer"
-
-# custom prebuild plugin to set version number ENV var from package.json
-
-
-# Sentry is enabled for develop, stage, prod
-# Since all sites have the context of 'production' for each release
-# error scoping is controlled with the VITE_APP_BUILD_ENV variable
-# (to remove sentry errors from branch or preview deployments)
-[context.production.environment]
-VITE_APP_SENTRY_DSN = "https://f91af77231b84e43a46fea61d2fef7c4@o417296.ingest.sentry.io/5731652"
-
-# Set non-sensitive env variables
-# that live across all envs for simplicity here
-# all URIs and env specif configs live in the netlify enviornment UI configs
-[build.environment]
-SKIP_PREFLIGHT_CHECK = "true"
