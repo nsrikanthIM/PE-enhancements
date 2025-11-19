@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Star, Info, Building2, User, Pill, X, FileText } from "lucide-react";
+import { Star, Info, Building2, User, Pill, X, Download } from "lucide-react";
 import CircularProgress from "./CircularProgress";
 import MatchScoreForm from "./MatchScoreForm";
 import PdfSummaryModal from "./PdfSummaryModal";
@@ -206,11 +206,11 @@ export default function MedicarePlanCard({
 
             <button
               onClick={() => setIsPdfModalOpen(true)}
-              className="flex items-center gap-1.5 text-sm text-primary hover-elevate active-elevate-2 px-2 py-1 rounded-md transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-semibold rounded-lg shadow-md hover-elevate active-elevate-2 transition-all hover:shadow-lg"
               data-testid={`button-pdf-summary-${plan.id}`}
             >
-              <FileText className="w-4 h-4" />
-              <span>Plan Summary</span>
+              <Download className="w-4 h-4" />
+              <span className="text-sm">Download PDF</span>
             </button>
           </div>
 
