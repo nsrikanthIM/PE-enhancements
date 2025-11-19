@@ -8,10 +8,25 @@ import type { MedicarePlan } from "@shared/schema";
 export default function Home() {
   const [selectedPlans, setSelectedPlans] = useState<Set<string>>(new Set());
 
-  // Mock data for demonstration
   const mockPlans: MedicarePlan[] = [
     {
       id: "1",
+      planName: "AARP Medicare Advantage Patriot No Rx KS-MA01 (PPO)",
+      carrier: "UnitedHealthcare",
+      year: 2026,
+      starRating: 3,
+      monthlyPremium: "0",
+      medicalDeductible: "0",
+      outOfPocketMax: "6700",
+      rxDrugDeductible: "0",
+      estimatedAnnualRxCost: "0",
+      pharmaciesCovered: 0,
+      doctorName: null,
+      matchScore: 85,
+      recommended: 0,
+    },
+    {
+      id: "2",
       planName: "Aetna Medicare Value Plus (HMO) H2663-053",
       carrier: "Aetna Medicare",
       year: 2026,
@@ -24,10 +39,10 @@ export default function Home() {
       pharmaciesCovered: 1,
       doctorName: "Tommy Rose",
       matchScore: 95,
-      recommended: 1,
+      recommended: 0,
     },
     {
-      id: "2",
+      id: "3",
       planName: "UnitedHealthcare AARP Medicare Advantage Plan 1",
       carrier: "UnitedHealthcare",
       year: 2026,
@@ -43,7 +58,7 @@ export default function Home() {
       recommended: 0,
     },
     {
-      id: "3",
+      id: "4",
       planName: "Humana Gold Plus H1036-239 (HMO)",
       carrier: "Humana",
       year: 2026,
@@ -56,22 +71,6 @@ export default function Home() {
       pharmaciesCovered: 1,
       doctorName: null,
       matchScore: 82,
-      recommended: 0,
-    },
-    {
-      id: "4",
-      planName: "Wellcare Medicare Giveback (HMO) H3535-005",
-      carrier: "Wellcare",
-      year: 2026,
-      starRating: 3,
-      monthlyPremium: "15.00",
-      medicalDeductible: "350",
-      outOfPocketMax: "6700",
-      rxDrugDeductible: "545.00",
-      estimatedAnnualRxCost: "85",
-      pharmaciesCovered: 1,
-      doctorName: "Dr. Michael Chen",
-      matchScore: 68,
       recommended: 0,
     },
   ];
@@ -128,7 +127,7 @@ export default function Home() {
           )}
         </div>
 
-        <div className="grid gap-6">
+        <div className="flex flex-col items-center gap-6">
           {mockPlans.map((plan) => (
             <MedicarePlanCard
               key={plan.id}

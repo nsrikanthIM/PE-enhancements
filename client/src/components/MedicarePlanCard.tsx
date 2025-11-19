@@ -1,8 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import { Star, Info, Building2, User, Pill } from "lucide-react";
+import { Star, Info, Building2, User, Pill, X } from "lucide-react";
 import CircularProgress from "./CircularProgress";
 import type { MedicarePlan } from "@shared/schema";
 
@@ -38,6 +37,8 @@ export default function MedicarePlanCard({
             className={`w-4 h-4 ${
               star <= rating
                 ? "fill-yellow-500 text-yellow-500"
+                : star === rating + 1
+                ? "fill-yellow-500/50 text-yellow-500"
                 : "fill-none text-muted"
             }`}
             data-testid={`star-${star}`}
@@ -48,27 +49,18 @@ export default function MedicarePlanCard({
   };
 
   return (
-    <Card className="relative hover-elevate" data-testid={`card-plan-${plan.id}`}>
-      {plan.recommended === 1 && (
-        <div className="absolute -top-3 left-6 z-10">
-          <Badge className="bg-primary text-primary-foreground px-3 py-1" data-testid="badge-recommended">
-            RECOMMENDED
-          </Badge>
-        </div>
-      )}
-
-      <div className="absolute top-6 right-6 z-10">
-        <CircularProgress percentage={plan.matchScore} size={96} strokeWidth={9} />
+    <Card className="relative w-full max-w-[800px]" data-testid={`card-plan-${plan.id}`}>
+      <div className="absolute top-4 right-4 z-10">
+        <CircularProgress percentage={plan.matchScore} size={88} strokeWidth={8} />
       </div>
 
-      <CardHeader className="pb-3 pr-32">
-        <div className="flex items-start gap-3">
-          <Building2 className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-          <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold text-card-foreground leading-tight" data-testid="text-plan-name">
+      <CardHeader className="pb-4 pr-28">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <h3 className="text-xl font-normal text-primary leading-tight mb-2" data-testid="text-plan-name">
               {plan.planName}
             </h3>
-            <div className="flex items-center gap-3 mt-2 flex-wrap">
+            <div className="flex items-center gap-3">
               {renderStars(plan.starRating)}
               <span className="text-sm text-muted-foreground">{plan.year}</span>
               <span className="text-sm text-muted-foreground">{plan.carrier}</span>
@@ -77,80 +69,93 @@ export default function MedicarePlanCard({
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
-        <div className="space-y-3">
-          <div className="flex items-baseline gap-2">
-            <span className="text-xs uppercase tracking-wide text-muted-foreground">
-              Monthly Premium
-            </span>
-            <Info className="w-3.5 h-3.5 text-muted-foreground" />
-          </div>
-          <div className="text-4xl font-bold text-primary" data-testid="text-premium">
-            {formatCurrency(plan.monthlyPremium)}
-          </div>
-        </div>
+      <CardContent className="pt-0">
+        <div className="border-t pt-4">
+          <div className="flex gap-6">
+            <div className="flex-shrink-0 w-48">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-sm text-muted-foreground">Monthly Premium</span>
+                <Info className="w-3.5 h-3.5 text-muted-foreground" />
+              </div>
+              <div className="text-4xl font-bold text-primary" data-testid="text-premium">
+                {formatCurrency(plan.monthlyPremium)}
+              </div>
+            </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Medical Deductible</span>
-              <Info className="w-3.5 h-3.5 text-muted-foreground" />
-            </div>
-            <div className="text-base font-semibold" data-testid="text-medical-deductible">
-              {formatCurrency(plan.medicalDeductible)}
-            </div>
-          </div>
+            <div className="flex-1 grid grid-cols-2 gap-x-8 gap-y-4">
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm text-muted-foreground">Medical Deductible</span>
+                  <Info className="w-3.5 h-3.5 text-muted-foreground" />
+                </div>
+                <div className="text-base font-medium" data-testid="text-medical-deductible">
+                  {formatCurrency(plan.medicalDeductible)}
+                </div>
+              </div>
 
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Out of Pocket Health Max</span>
-              <Info className="w-3.5 h-3.5 text-muted-foreground" />
-            </div>
-            <div className="text-base font-semibold" data-testid="text-out-of-pocket">
-              {formatCurrency(plan.outOfPocketMax)}
-            </div>
-          </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm text-muted-foreground">Out of Pocket Health Max</span>
+                  <Info className="w-3.5 h-3.5 text-muted-foreground" />
+                </div>
+                <div className="text-base font-medium" data-testid="text-out-of-pocket">
+                  {formatCurrency(plan.outOfPocketMax)}
+                </div>
+              </div>
 
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Rx Drug Deductible</span>
-              <Info className="w-3.5 h-3.5 text-muted-foreground" />
-            </div>
-            <div className="text-base font-semibold" data-testid="text-rx-deductible">
-              {formatCurrency(plan.rxDrugDeductible)}
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Estimated Annual Rx Drug Cost</span>
-              <Info className="w-3.5 h-3.5 text-muted-foreground" />
-            </div>
-            <div className="text-base font-semibold" data-testid="text-annual-rx-cost">
-              {formatCurrency(plan.estimatedAnnualRxCost)}
+              <div className="col-span-2">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm text-muted-foreground">Rx Drug Deductible</span>
+                  <Info className="w-3.5 h-3.5 text-muted-foreground" />
+                </div>
+                <div className="text-base font-medium" data-testid="text-rx-deductible">
+                  {plan.rxDrugDeductible === "0" || parseFloat(plan.rxDrugDeductible) === 0
+                    ? "No Rx Drug coverage"
+                    : formatCurrency(plan.rxDrugDeductible)}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-4 pt-2 flex-wrap">
-          <div className="flex items-center gap-2 text-sm">
-            <Pill className="w-4 h-4 text-muted-foreground" />
-            <span className="text-muted-foreground">
-              {plan.pharmaciesCovered} of {plan.pharmaciesCovered} Pharmacies Covered
-            </span>
-          </div>
-          {plan.doctorName && (
+        <div className="border-t mt-4 pt-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm">
-              <User className="w-4 h-4 text-primary" />
-              <span className="text-foreground font-medium" data-testid="text-doctor-name">
-                {plan.doctorName}
+              <Building2 className="w-4 h-4 text-muted-foreground" />
+              <span className="text-muted-foreground">
+                {plan.pharmaciesCovered === 0 ? "0" : plan.pharmaciesCovered} of {plan.pharmaciesCovered === 0 ? "1" : plan.pharmaciesCovered} Pharmacies Covered
               </span>
             </div>
-          )}
+
+            <div className="flex items-center gap-2 text-sm">
+              {plan.doctorName ? (
+                <>
+                  <User className="w-4 h-4 text-primary" />
+                  <span className="text-primary" data-testid="text-doctor-name">
+                    {plan.doctorName}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <X className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">Tommy Rose</span>
+                </>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 text-sm italic">
+              <Pill className="w-4 h-4 text-muted-foreground" />
+              <span className="text-muted-foreground">
+                {plan.rxDrugDeductible === "0" || parseFloat(plan.rxDrugDeductible) === 0
+                  ? "No Rx Drug coverage"
+                  : "Rx Drug coverage"}
+              </span>
+            </div>
+          </div>
         </div>
       </CardContent>
 
-      <CardFooter className="flex items-center justify-between gap-3 pt-4 flex-wrap">
+      <CardFooter className="flex items-center justify-between pt-4 border-t">
         <div className="flex items-center gap-2">
           <Checkbox
             id={`compare-${plan.id}`}
@@ -159,7 +164,7 @@ export default function MedicarePlanCard({
           />
           <label
             htmlFor={`compare-${plan.id}`}
-            className="text-sm text-foreground cursor-pointer"
+            className="text-sm text-foreground cursor-pointer select-none"
           >
             Compare
           </label>
@@ -167,7 +172,8 @@ export default function MedicarePlanCard({
 
         <div className="flex items-center gap-3">
           <Button
-            variant="outline"
+            variant="ghost"
+            className="text-primary hover:text-primary"
             onClick={onViewDetails}
             data-testid="button-view-details"
           >
