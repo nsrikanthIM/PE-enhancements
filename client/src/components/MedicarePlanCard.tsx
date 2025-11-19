@@ -6,6 +6,7 @@ import { Star, Info, Building2, User, Pill, X, Download } from "lucide-react";
 import CircularProgress from "./CircularProgress";
 import MatchScoreForm from "./MatchScoreForm";
 import PdfSummaryModal from "./PdfSummaryModal";
+import NetworkDetailsModal from "./NetworkDetailsModal";
 import PlanChangeImpact from "./PlanChangeImpact";
 import type { MedicarePlan, PlanChangeImpact as PlanChangeImpactType } from "@shared/schema";
 
@@ -26,6 +27,7 @@ export default function MedicarePlanCard({
 }: MedicarePlanCardProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
+  const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [scoreUnlocked, setScoreUnlocked] = useState(false);
 
   const formatCurrency = (value: string | number) => {
@@ -151,7 +153,7 @@ export default function MedicarePlanCard({
             </div>
           </div>
 
-          <div className="border-t mt-4 pt-4">
+          <div className="border-t mt-4 pt-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm">
                 <Building2 className="w-4 h-4 text-muted-foreground" />
@@ -184,6 +186,19 @@ export default function MedicarePlanCard({
                     : "Rx Drug coverage"}
                 </span>
               </div>
+            </div>
+
+            <div className="flex justify-center">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsNetworkModalOpen(true)}
+                className="text-primary border-primary/30 hover:bg-primary/5"
+                data-testid={`button-network-details-${plan.id}`}
+              >
+                <User className="w-4 h-4 mr-2" />
+                View In-Network Providers
+              </Button>
             </div>
           </div>
         </CardContent>
@@ -232,6 +247,7 @@ export default function MedicarePlanCard({
 
       <MatchScoreForm open={isFormOpen} onOpenChange={handleFormClose} />
       <PdfSummaryModal open={isPdfModalOpen} onOpenChange={setIsPdfModalOpen} plan={plan} />
+      <NetworkDetailsModal open={isNetworkModalOpen} onOpenChange={setIsNetworkModalOpen} plan={plan} />
     </>
   );
 }
