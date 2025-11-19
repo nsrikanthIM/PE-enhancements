@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MedicarePlanCard from "@/components/MedicarePlanCard";
+import CurrentPlanBanner from "@/components/CurrentPlanBanner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Filter, SlidersHorizontal } from "lucide-react";
@@ -7,8 +8,8 @@ import type { MedicarePlan, PlanChangeImpact } from "@shared/schema";
 
 export default function Home() {
   const [selectedPlans, setSelectedPlans] = useState<Set<string>>(new Set());
+  const [currentPlan, setCurrentPlan] = useState<MedicarePlan | null>(null);
 
-  // Mock data - simulating a returning user with an existing plan
   const mockPlans: MedicarePlan[] = [
     {
       id: "1",
@@ -76,32 +77,22 @@ export default function Home() {
     },
   ];
 
-  // Mock plan change impacts - simulating comparison with current plan
-  const mockImpacts: Record<string, PlanChangeImpact> = {
-    "2": {
-      yearlySavings: 540,
-      doctorsLost: 1,
-      doctorsGained: 0,
+  const calculateImpact = (plan: MedicarePlan): PlanChangeImpact | null => {
+    if (!currentPlan) return null;
+
+    const currentYearlyCost = parseFloat(currentPlan.monthlyPremium) * 12;
+    const newYearlyCost = parseFloat(plan.monthlyPremium) * 12;
+    const yearlySavings = Math.round(currentYearlyCost - newYearlyCost);
+
+    // Mock impact data - in a real app, this would compare actual plan details
+    return {
+      yearlySavings,
+      doctorsLost: plan.id === "2" ? 1 : 0,
+      doctorsGained: plan.id === "3" ? 2 : plan.id === "4" ? 1 : 0,
       pharmaciesLost: 0,
-      pharmaciesGained: 1,
-      coverageChanges: [],
-    },
-    "3": {
-      yearlySavings: 320,
-      doctorsLost: 0,
-      doctorsGained: 2,
-      pharmaciesLost: 0,
-      pharmaciesGained: 1,
-      coverageChanges: ["Better prescription drug coverage"],
-    },
-    "4": {
-      yearlySavings: -180,
-      doctorsLost: 0,
-      doctorsGained: 1,
-      pharmaciesLost: 0,
-      pharmaciesGained: 0,
-      coverageChanges: ["Enhanced dental coverage", "Vision coverage included"],
-    },
+      pharmaciesGained: plan.pharmaciesCovered > 0 ? 1 : 0,
+      coverageChanges: plan.id === "3" ? ["Better prescription drug coverage"] : plan.id === "4" ? ["Enhanced dental coverage", "Vision coverage included"] : [],
+    };
   };
 
   const handleCompareToggle = (planId: string, checked: boolean) => {
@@ -142,6 +133,8 @@ export default function Home() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        <CurrentPlanBanner currentPlan={currentPlan} onPlanAdded={setCurrentPlan} />
+
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-semibold">Available Plans</h2>
@@ -161,7 +154,7 @@ export default function Home() {
             <MedicarePlanCard
               key={plan.id}
               plan={plan}
-              planChangeImpact={mockImpacts[plan.id] || null}
+              planChangeImpact={calculateImpact(plan)}
               onCompareChange={(checked) => handleCompareToggle(plan.id, checked)}
               onViewDetails={() => console.log("View details:", plan.planName)}
               onEnroll={() => console.log("Enroll in:", plan.planName)}
