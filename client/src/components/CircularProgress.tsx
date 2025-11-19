@@ -8,6 +8,7 @@ interface CircularProgressProps {
   className?: string;
   blurred?: boolean;
   onClick?: () => void;
+  onWhyClick?: () => void;
   testId?: string;
 }
 
@@ -18,6 +19,7 @@ export default function CircularProgress({
   className = "",
   blurred = false,
   onClick,
+  onWhyClick,
   testId = "circular-progress",
 }: CircularProgressProps) {
   const [progress, setProgress] = useState(0);
@@ -114,6 +116,19 @@ export default function CircularProgress({
         </div>
         <div className="text-xs text-muted-foreground mt-0.5">Match</div>
       </div>
+      
+      {!blurred && onWhyClick && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onWhyClick();
+          }}
+          className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-primary hover:underline font-medium whitespace-nowrap"
+          data-testid={`${testId}-why-button`}
+        >
+          Why?
+        </button>
+      )}
     </div>
   );
 }

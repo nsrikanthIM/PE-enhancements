@@ -10,6 +10,7 @@ import InNetworkDoctorsModal from "./InNetworkDoctorsModal";
 import InNetworkPharmaciesModal from "./InNetworkPharmaciesModal";
 import PlanChangeImpact from "./PlanChangeImpact";
 import ProfileCompletionPrompt from "./ProfileCompletionPrompt";
+import MatchScoreBreakdownModal from "./MatchScoreBreakdownModal";
 import type { MedicarePlan, PlanChangeImpact as PlanChangeImpactType } from "@shared/schema";
 
 interface MedicarePlanCardProps {
@@ -31,6 +32,7 @@ export default function MedicarePlanCard({
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [isDoctorsModalOpen, setIsDoctorsModalOpen] = useState(false);
   const [isPharmaciesModalOpen, setIsPharmaciesModalOpen] = useState(false);
+  const [isBreakdownModalOpen, setIsBreakdownModalOpen] = useState(false);
   const [scoreUnlocked, setScoreUnlocked] = useState(false);
 
   const formatCurrency = (value: string | number) => {
@@ -86,6 +88,7 @@ export default function MedicarePlanCard({
             strokeWidth={8}
             blurred={!scoreUnlocked}
             onClick={handleScoreClick}
+            onWhyClick={() => setIsBreakdownModalOpen(true)}
             testId={`circular-progress-${plan.id}`}
           />
         </div>
@@ -261,6 +264,7 @@ export default function MedicarePlanCard({
       <PdfSummaryModal open={isPdfModalOpen} onOpenChange={setIsPdfModalOpen} plan={plan} />
       <InNetworkDoctorsModal open={isDoctorsModalOpen} onOpenChange={setIsDoctorsModalOpen} plan={plan} />
       <InNetworkPharmaciesModal open={isPharmaciesModalOpen} onOpenChange={setIsPharmaciesModalOpen} plan={plan} />
+      <MatchScoreBreakdownModal open={isBreakdownModalOpen} onOpenChange={setIsBreakdownModalOpen} plan={plan} />
     </>
   );
 }
