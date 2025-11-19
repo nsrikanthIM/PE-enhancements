@@ -117,7 +117,7 @@ export default function CircularProgress({
         <div className="text-xs text-muted-foreground mt-0.5">Match</div>
       </div>
       
-      {!blurred && onWhyClick && (
+      {onWhyClick && (
         <button
           onClick={(e) => {
             e.stopPropagation();
