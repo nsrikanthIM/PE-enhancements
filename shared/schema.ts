@@ -7,6 +7,7 @@ export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  currentPlanId: varchar("current_plan_id"),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -40,3 +41,12 @@ export const insertMedicarePlanSchema = createInsertSchema(medicarePlans).omit({
 
 export type InsertMedicarePlan = z.infer<typeof insertMedicarePlanSchema>;
 export type MedicarePlan = typeof medicarePlans.$inferSelect;
+
+export interface PlanChangeImpact {
+  yearlySavings: number;
+  doctorsLost: number;
+  doctorsGained: number;
+  pharmaciesLost: number;
+  pharmaciesGained: number;
+  coverageChanges: string[];
+}

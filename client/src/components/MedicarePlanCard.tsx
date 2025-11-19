@@ -6,10 +6,12 @@ import { Star, Info, Building2, User, Pill, X, FileText } from "lucide-react";
 import CircularProgress from "./CircularProgress";
 import MatchScoreForm from "./MatchScoreForm";
 import PdfSummaryModal from "./PdfSummaryModal";
-import type { MedicarePlan } from "@shared/schema";
+import PlanChangeImpact from "./PlanChangeImpact";
+import type { MedicarePlan, PlanChangeImpact as PlanChangeImpactType } from "@shared/schema";
 
 interface MedicarePlanCardProps {
   plan: MedicarePlan;
+  planChangeImpact?: PlanChangeImpactType | null;
   onCompareChange?: (checked: boolean) => void;
   onViewDetails?: () => void;
   onEnroll?: () => void;
@@ -17,6 +19,7 @@ interface MedicarePlanCardProps {
 
 export default function MedicarePlanCard({
   plan,
+  planChangeImpact,
   onCompareChange,
   onViewDetails,
   onEnroll,
@@ -95,6 +98,8 @@ export default function MedicarePlanCard({
             </div>
           </div>
         </CardHeader>
+
+        {planChangeImpact && <PlanChangeImpact impact={planChangeImpact} />}
 
         <CardContent className="pt-0">
           <div className="border-t pt-4">

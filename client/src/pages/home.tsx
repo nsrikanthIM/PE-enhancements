@@ -3,11 +3,12 @@ import MedicarePlanCard from "@/components/MedicarePlanCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Filter, SlidersHorizontal } from "lucide-react";
-import type { MedicarePlan } from "@shared/schema";
+import type { MedicarePlan, PlanChangeImpact } from "@shared/schema";
 
 export default function Home() {
   const [selectedPlans, setSelectedPlans] = useState<Set<string>>(new Set());
 
+  // Mock data - simulating a returning user with an existing plan
   const mockPlans: MedicarePlan[] = [
     {
       id: "1",
@@ -75,6 +76,34 @@ export default function Home() {
     },
   ];
 
+  // Mock plan change impacts - simulating comparison with current plan
+  const mockImpacts: Record<string, PlanChangeImpact> = {
+    "2": {
+      yearlySavings: 540,
+      doctorsLost: 1,
+      doctorsGained: 0,
+      pharmaciesLost: 0,
+      pharmaciesGained: 1,
+      coverageChanges: [],
+    },
+    "3": {
+      yearlySavings: 320,
+      doctorsLost: 0,
+      doctorsGained: 2,
+      pharmaciesLost: 0,
+      pharmaciesGained: 1,
+      coverageChanges: ["Better prescription drug coverage"],
+    },
+    "4": {
+      yearlySavings: -180,
+      doctorsLost: 0,
+      doctorsGained: 1,
+      pharmaciesLost: 0,
+      pharmaciesGained: 0,
+      coverageChanges: ["Enhanced dental coverage", "Vision coverage included"],
+    },
+  };
+
   const handleCompareToggle = (planId: string, checked: boolean) => {
     setSelectedPlans((prev) => {
       const newSet = new Set(prev);
@@ -132,6 +161,7 @@ export default function Home() {
             <MedicarePlanCard
               key={plan.id}
               plan={plan}
+              planChangeImpact={mockImpacts[plan.id] || null}
               onCompareChange={(checked) => handleCompareToggle(plan.id, checked)}
               onViewDetails={() => console.log("View details:", plan.planName)}
               onEnroll={() => console.log("Enroll in:", plan.planName)}
