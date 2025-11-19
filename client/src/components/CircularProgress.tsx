@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Lock } from "lucide-react";
+import { Lock, Sparkles } from "lucide-react";
 
 interface CircularProgressProps {
   percentage: number;
@@ -60,11 +60,17 @@ export default function CircularProgress({
     >
       {blurred && (
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-transparent backdrop-blur-md z-20 border-2 border-primary/30 shadow-lg">
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="bg-white/95 px-4 py-2.5 rounded-lg shadow-xl border border-primary/20 transform transition-all hover:scale-105 hover:shadow-2xl">
-              <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 text-primary" />
-                <span className="text-sm font-semibold text-primary">Click to unlock</span>
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
+            <div className="bg-white/95 px-3 py-2 rounded-lg shadow-xl border border-primary/20 transform transition-all hover:scale-105 hover:shadow-2xl">
+              <div className="flex flex-col items-center gap-1 text-center">
+                <div className="flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs font-bold text-primary">Your Match Score</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Lock className="w-3 h-3 text-muted-foreground" />
+                  <span className="text-[10px] text-muted-foreground">Click to see how well this plan fits you</span>
+                </div>
               </div>
             </div>
           </div>
