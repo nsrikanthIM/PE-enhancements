@@ -209,7 +209,7 @@ export default function MedicarePlanCard({
               data-testid="button-pdf-summary"
             >
               <FileText className="w-4 h-4" />
-              <span>PDF Summary</span>
+              <span>Plan Summary</span>
             </button>
           </div>
 

@@ -42,7 +42,7 @@ export default function PdfSummaryModal({ open, onOpenChange, plan }: PdfSummary
             AI-Enhanced Plan Summary
           </DialogTitle>
           <DialogDescription>
-            Get a personalized PDF summary of this Medicare plan with AI-powered insights
+            Get a personalized plan summary with AI-powered insights (downloadable as PDF)
           </DialogDescription>
         </DialogHeader>
 
