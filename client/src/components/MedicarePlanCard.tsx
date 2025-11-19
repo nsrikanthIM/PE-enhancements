@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Star, Info, Building2, User, Pill, X } from "lucide-react";
+import { Star, Info, Building2, User, Pill, X, FileText } from "lucide-react";
 import CircularProgress from "./CircularProgress";
 import MatchScoreForm from "./MatchScoreForm";
+import PdfSummaryModal from "./PdfSummaryModal";
 import type { MedicarePlan } from "@shared/schema";
 
 interface MedicarePlanCardProps {
@@ -21,6 +22,7 @@ export default function MedicarePlanCard({
   onEnroll,
 }: MedicarePlanCardProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [scoreUnlocked, setScoreUnlocked] = useState(false);
 
   const formatCurrency = (value: string | number) => {
@@ -181,18 +183,29 @@ export default function MedicarePlanCard({
         </CardContent>
 
         <CardFooter className="flex items-center justify-between pt-4 border-t">
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id={`compare-${plan.id}`}
-              onCheckedChange={onCompareChange}
-              data-testid="checkbox-compare"
-            />
-            <label
-              htmlFor={`compare-${plan.id}`}
-              className="text-sm text-foreground cursor-pointer select-none"
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id={`compare-${plan.id}`}
+                onCheckedChange={onCompareChange}
+                data-testid="checkbox-compare"
+              />
+              <label
+                htmlFor={`compare-${plan.id}`}
+                className="text-sm text-foreground cursor-pointer select-none"
+              >
+                Compare
+              </label>
+            </div>
+
+            <button
+              onClick={() => setIsPdfModalOpen(true)}
+              className="flex items-center gap-1.5 text-sm text-primary hover-elevate active-elevate-2 px-2 py-1 rounded-md transition-colors"
+              data-testid="button-pdf-summary"
             >
-              Compare
-            </label>
+              <FileText className="w-4 h-4" />
+              <span>PDF Summary</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-3">
@@ -212,6 +225,7 @@ export default function MedicarePlanCard({
       </Card>
 
       <MatchScoreForm open={isFormOpen} onOpenChange={handleFormClose} />
+      <PdfSummaryModal open={isPdfModalOpen} onOpenChange={setIsPdfModalOpen} plan={plan} />
     </>
   );
 }
