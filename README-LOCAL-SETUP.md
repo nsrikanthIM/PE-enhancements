@@ -23,18 +23,29 @@ This will install all the required packages.
 
 ### 2. Run the Application
 
-Start the development server:
+**For Static UI (No Backend - Recommended)**
+
+Run Vite directly:
 
 ```bash
-npm run dev
+npx vite
 ```
 
-The application will start and open in your browser at:
-```
-http://localhost:5173
+The application will open at: **http://localhost:5173**
+
+**Alternative: Use the convenience scripts**
+
+Linux/Mac:
+```bash
+./run-static.sh
 ```
 
-(Vite uses port 5173 by default, but if that port is busy, it will use the next available port)
+Windows:
+```bash
+run-static.bat
+```
+
+These scripts run the same `npx vite` command for you.
 
 ## 🏗️ Build for Production
 
