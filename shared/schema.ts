@@ -30,5 +30,10 @@ export interface PlanChangeImpact {
 export interface User {
   id: string;
   username: string;
-  currentPlanId?: string;
+  currentPlanId?: string | null;
+}
+
+export interface InsertUser {
+  username: string;
+  currentPlanId?: string | null;
 }

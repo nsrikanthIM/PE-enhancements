@@ -25,14 +25,14 @@ export default function PlanChangeImpactExample() {
       <div>
         <h3 className="text-lg font-semibold mb-4">Example 1: Savings with Trade-offs</h3>
         <div className="bg-white rounded-lg p-4">
-          <PlanChangeImpact impact={sampleImpact} />
+          <PlanChangeImpact impact={sampleImpact} planId="example-1" />
         </div>
       </div>
 
       <div>
         <h3 className="text-lg font-semibold mb-4">Example 2: Higher Cost with Benefits</h3>
         <div className="bg-white rounded-lg p-4">
-          <PlanChangeImpact impact={sampleImpactCost} />
+          <PlanChangeImpact impact={sampleImpactCost} planId="example-2" />
         </div>
       </div>
     </div>

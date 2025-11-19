@@ -108,9 +108,9 @@ export default function MedicarePlanCard({
           </div>
         </CardHeader>
 
-        <div className="px-6 pb-4">
+         <div className="px-6 pb-4">
           <ProfileCompletionPrompt planId={plan.id} />
-        </div>
+        </div> 
 
         {planChangeImpact && <PlanChangeImpact impact={planChangeImpact} planId={plan.id} />}
 
