@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,63 @@ interface PdfSummaryModalProps {
   plan: MedicarePlan;
 }
 
+function AnimatedPlanSummary({ plan }: { plan: MedicarePlan }) {
+  const [visibleLines, setVisibleLines] = useState(0);
+
+  const summaryLines = [
+    `This is the ${plan.planName}, a ${plan.starRating}-star rated Medicare plan offered by ${plan.carrier}.`,
+    `Your monthly premium would be just $${plan.monthlyPremium}, which is what you'll pay each month to keep this coverage active.`,
+    `The medical deductible is $${plan.medicalDeductible}, meaning that's the amount you'd pay out of pocket before the plan starts covering your medical expenses.`,
+    `Your maximum out-of-pocket cost is capped at $${plan.outOfPocketMax} per year, so you'll never pay more than that for covered services.`,
+    plan.rxDrugDeductible && parseFloat(plan.rxDrugDeductible) > 0
+      ? `For prescription drugs, there's a deductible of $${plan.rxDrugDeductible} before your medication coverage kicks in.`
+      : `Great news - this plan includes prescription drug coverage with no separate deductible.`,
+    plan.pharmaciesCovered > 0
+      ? `You'll have access to ${plan.pharmaciesCovered} pharmacy location${plan.pharmaciesCovered > 1 ? 's' : ''} in the network, making it convenient to fill your prescriptions.`
+      : `Please note that this plan has limited pharmacy coverage, so you'll want to check if your preferred pharmacy is in network.`,
+    plan.doctorName
+      ? `Your current doctor, ${plan.doctorName}, is already in this plan's network, so you can continue seeing them without any issues.`
+      : `You'll want to verify that your preferred doctors are in this plan's network to avoid out-of-network charges.`,
+    `Based on your healthcare needs and preferences, this plan has a ${plan.matchScore}% match score, indicating it's a ${plan.matchScore >= 90 ? 'excellent' : plan.matchScore >= 80 ? 'very good' : 'good'} fit for you.`,
+    `This summary will be sent to your email as a detailed PDF with additional information about benefits, coverage details, and next steps for enrollment.`
+  ];
+
+  useEffect(() => {
+    if (visibleLines < summaryLines.length) {
+      const timer = setTimeout(() => {
+        setVisibleLines(prev => prev + 1);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [visibleLines, summaryLines.length]);
+
+  useEffect(() => {
+    setVisibleLines(0);
+  }, [plan.id]);
+
+  return (
+    <div className="space-y-3 text-base leading-relaxed">
+      {summaryLines.map((line, index) => (
+        <div
+          key={index}
+          className={`transition-all duration-500 ${
+            index < visibleLines
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-4'
+          }`}
+          style={{
+            transitionDelay: `${index * 50}ms`
+          }}
+        >
+          <p className="text-foreground">
+            {line}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function PdfSummaryModal({ open, onOpenChange, plan }: PdfSummaryModalProps) {
   const [email, setEmail] = useState("");
   const [unlocked, setUnlocked] = useState(false);
@@ -35,7 +92,7 @@ export default function PdfSummaryModal({ open, onOpenChange, plan }: PdfSummary
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold flex items-center gap-3 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             <Gift className="w-8 h-8 text-primary" />
@@ -200,54 +257,11 @@ export default function PdfSummaryModal({ open, onOpenChange, plan }: PdfSummary
                   </div>
                   <div>
                     <h4 className="font-bold text-lg">{plan.planName}</h4>
-                    <p className="text-sm text-muted-foreground">Plan Summary Report • {plan.year}</p>
+                    <p className="text-sm text-muted-foreground">Plan Summary in Plain English</p>
                   </div>
                 </div>
                 
-                <div className="space-y-4 text-sm">
-                  <div className="bg-muted/30 rounded-lg p-4">
-                    <h5 className="font-semibold mb-2 flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-primary" />
-                      Coverage Overview
-                    </h5>
-                    <p className="text-muted-foreground leading-relaxed">
-                      This plan offers comprehensive coverage with a monthly premium of ${plan.monthlyPremium}.
-                      Medical deductible is ${plan.medicalDeductible} with an out-of-pocket maximum of ${plan.outOfPocketMax}.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-muted/30 rounded-lg p-4">
-                    <h5 className="font-semibold mb-2">Key Benefits</h5>
-                    <ul className="space-y-1.5 text-muted-foreground">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
-                        {plan.starRating} star rated plan by Medicare
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
-                        {plan.pharmaciesCovered} pharmacy locations covered
-                      </li>
-                      {plan.doctorName && (
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
-                          Your doctor {plan.doctorName} is in-network
-                        </li>
-                      )}
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
-                        Rx Drug coverage included
-                      </li>
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-4 border border-primary/20">
-                    <h5 className="font-semibold mb-2 text-primary">AI-Powered Insights</h5>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Based on your profile, this plan offers excellent value with a <span className="font-semibold text-green-600">{plan.matchScore}% match score</span>.
-                      The combination of premium costs and coverage benefits aligns well with your healthcare needs.
-                    </p>
-                  </div>
-                </div>
+                <AnimatedPlanSummary plan={plan} />
               </div>
 
               <div className="flex justify-between items-center gap-3">
@@ -265,7 +279,7 @@ export default function PdfSummaryModal({ open, onOpenChange, plan }: PdfSummary
                   data-testid="button-pdf-download"
                 >
                   <Download className="w-5 h-5 mr-2" />
-                  Download PDF Again
+                  Download PDF
                 </Button>
               </div>
             </div>
