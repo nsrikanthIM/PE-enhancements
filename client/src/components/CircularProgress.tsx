@@ -5,6 +5,8 @@ interface CircularProgressProps {
   size?: number;
   strokeWidth?: number;
   className?: string;
+  blurred?: boolean;
+  onClick?: () => void;
 }
 
 export default function CircularProgress({
@@ -12,6 +14,8 @@ export default function CircularProgress({
   size = 96,
   strokeWidth = 8,
   className = "",
+  blurred = false,
+  onClick,
 }: CircularProgressProps) {
   const [progress, setProgress] = useState(0);
   const [displayPercentage, setDisplayPercentage] = useState(0);
@@ -47,8 +51,17 @@ export default function CircularProgress({
   }, [percentage]);
 
   return (
-    <div className={`relative ${className}`} style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="transform -rotate-90">
+    <div
+      className={`relative ${onClick ? "cursor-pointer hover-elevate active-elevate-2" : ""} ${className}`}
+      style={{ width: size, height: size }}
+      onClick={onClick}
+      data-testid="circular-progress"
+    >
+      <svg
+        width={size}
+        height={size}
+        className={`transform -rotate-90 ${blurred ? "blur-sm" : ""}`}
+      >
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -71,12 +84,19 @@ export default function CircularProgress({
           className="transition-all duration-300 ease-out"
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
+      <div className={`absolute inset-0 flex flex-col items-center justify-center ${blurred ? "blur-sm" : ""}`}>
         <div className="text-2xl font-bold" style={{ color: getColor(percentage) }}>
           {displayPercentage}%
         </div>
         <div className="text-xs text-muted-foreground mt-0.5">Match</div>
       </div>
+      {blurred && onClick && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-xs font-medium text-primary bg-white px-2 py-1 rounded-md shadow-md">
+            Click to unlock
+          </div>
+        </div>
+      )}
     </div>
   );
 }
