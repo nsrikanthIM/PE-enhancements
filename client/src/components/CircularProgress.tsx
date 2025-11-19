@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Lock } from "lucide-react";
 
 interface CircularProgressProps {
   percentage: number;
@@ -52,15 +53,29 @@ export default function CircularProgress({
 
   return (
     <div
-      className={`relative ${onClick ? "cursor-pointer hover-elevate active-elevate-2" : ""} ${className}`}
+      className={`relative rounded-full ${onClick ? "cursor-pointer transition-transform hover:scale-105" : ""} ${className}`}
       style={{ width: size, height: size }}
       onClick={onClick}
       data-testid="circular-progress"
     >
+      {blurred && (
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-transparent backdrop-blur-md z-20 border-2 border-primary/30 shadow-lg">
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="bg-white/95 px-4 py-2.5 rounded-lg shadow-xl border border-primary/20 transform transition-all hover:scale-105 hover:shadow-2xl">
+              <div className="flex items-center gap-2">
+                <Lock className="w-4 h-4 text-primary" />
+                <span className="text-sm font-semibold text-primary">Click to unlock</span>
+              </div>
+            </div>
+          </div>
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/10 to-white/20 pointer-events-none"></div>
+        </div>
+      )}
+      
       <svg
         width={size}
         height={size}
-        className={`transform -rotate-90 ${blurred ? "blur-sm" : ""}`}
+        className={`transform -rotate-90 ${blurred ? "blur-sm opacity-60" : ""}`}
       >
         <circle
           cx={size / 2}
@@ -84,19 +99,13 @@ export default function CircularProgress({
           className="transition-all duration-300 ease-out"
         />
       </svg>
-      <div className={`absolute inset-0 flex flex-col items-center justify-center ${blurred ? "blur-sm" : ""}`}>
+      
+      <div className={`absolute inset-0 flex flex-col items-center justify-center ${blurred ? "blur-sm opacity-60" : ""}`}>
         <div className="text-2xl font-bold" style={{ color: getColor(percentage) }}>
           {displayPercentage}%
         </div>
         <div className="text-xs text-muted-foreground mt-0.5">Match</div>
       </div>
-      {blurred && onClick && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-xs font-medium text-primary bg-white px-2 py-1 rounded-md shadow-md">
-            Click to unlock
-          </div>
-        </div>
-      )}
     </div>
   );
 }
