@@ -1,6 +1,7 @@
 import { useState } from "react";
 import MedicarePlanCard from "@/components/MedicarePlanCard";
 import CurrentPlanBanner from "@/components/CurrentPlanBanner";
+import ComparisonPreview from "@/components/ComparisonPreview";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Filter, SlidersHorizontal } from "lucide-react";
@@ -9,6 +10,7 @@ import type { MedicarePlan, PlanChangeImpact } from "@shared/schema";
 export default function Home() {
   const [selectedPlans, setSelectedPlans] = useState<Set<string>>(new Set());
   const [currentPlan, setCurrentPlan] = useState<MedicarePlan | null>(null);
+  const [showComparison, setShowComparison] = useState(false);
 
   const mockPlans: MedicarePlan[] = [
     {
@@ -84,7 +86,6 @@ export default function Home() {
     const newYearlyCost = parseFloat(plan.monthlyPremium) * 12;
     const yearlySavings = Math.round(currentYearlyCost - newYearlyCost);
 
-    // Mock impact data - in a real app, this would compare actual plan details
     return {
       yearlySavings,
       doctorsLost: plan.id === "2" ? 1 : 0,
@@ -99,13 +100,17 @@ export default function Home() {
     setSelectedPlans((prev) => {
       const newSet = new Set(prev);
       if (checked) {
-        newSet.add(planId);
+        if (newSet.size < 3) {
+          newSet.add(planId);
+        }
       } else {
         newSet.delete(planId);
       }
       return newSet;
     });
   };
+
+  const selectedPlanObjects = mockPlans.filter(plan => selectedPlans.has(plan.id));
 
   return (
     <div className="min-h-screen bg-background">
@@ -164,12 +169,24 @@ export default function Home() {
 
         {selectedPlans.size >= 2 && (
           <div className="fixed bottom-6 right-6 z-20">
-            <Button size="lg" className="shadow-lg" data-testid="button-compare-plans">
+            <Button 
+              size="lg" 
+              className="shadow-lg" 
+              onClick={() => setShowComparison(true)}
+              data-testid="button-compare-plans"
+            >
               Compare {selectedPlans.size} Plans
             </Button>
           </div>
         )}
       </main>
+
+      {showComparison && (
+        <ComparisonPreview 
+          plans={selectedPlanObjects} 
+          onClose={() => setShowComparison(false)} 
+        />
+      )}
     </div>
   );
 }
