@@ -49,7 +49,7 @@ export default function MedicarePlanCard({
   };
 
   return (
-    <Card className="relative w-full max-w-[800px]" data-testid={`card-plan-${plan.id}`}>
+    <Card className="relative w-full max-w-[800px] bg-white" data-testid={`card-plan-${plan.id}`}>
       <div className="absolute top-4 right-4 z-10">
         <CircularProgress percentage={plan.matchScore} size={88} strokeWidth={8} />
       </div>
@@ -72,7 +72,7 @@ export default function MedicarePlanCard({
       <CardContent className="pt-0">
         <div className="border-t pt-4">
           <div className="flex gap-6">
-            <div className="flex-shrink-0 w-48">
+            <div className="flex-shrink-0 w-48 border-r pr-6">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm text-muted-foreground">Monthly Premium</span>
                 <Info className="w-3.5 h-3.5 text-muted-foreground" />
@@ -82,7 +82,7 @@ export default function MedicarePlanCard({
               </div>
             </div>
 
-            <div className="flex-1 grid grid-cols-2 gap-x-8 gap-y-4">
+            <div className="flex-1 space-y-3">
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm text-muted-foreground">Medical Deductible</span>
@@ -103,7 +103,7 @@ export default function MedicarePlanCard({
                 </div>
               </div>
 
-              <div className="col-span-2">
+              <div>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm text-muted-foreground">Rx Drug Deductible</span>
                   <Info className="w-3.5 h-3.5 text-muted-foreground" />
